@@ -22,7 +22,7 @@ const DashNav: React.FC<{ toggle: () => void }> = ({ toggle }) => {
 
   return (
     <>
-      <nav className="flex justify-between items-center px-5 py-2 bg-white dark:bg-black shadow-md dark:shadow-gray-900 transition-colors duration-300">
+      <nav className="flex justify-between items-center px-3 md:px-5 py-2 bg-white dark:bg-black shadow-md dark:shadow-gray-900 transition-colors duration-300">
         <label
           htmlFor="my-drawer-2"
           className="flex lg:hidden text-blue-800 dark:text-blue-400 px-3 cursor-pointer"
@@ -45,7 +45,7 @@ const DashNav: React.FC<{ toggle: () => void }> = ({ toggle }) => {
           <input
             type="text"
             placeholder="Search"
-            className="w-full md:w-[520px] rounded-md border-gray-200 dark:border-gray-800 border py-2 pe-0 sm:text-sm pl-10 outline-none ring-0 bg-inherit dark:bg-gray-950 text-gray-800 dark:text-gray-200"
+            className="w-full md:w-[500px] rounded-md border-gray-200 dark:border-gray-800 border py-2 pe-0 sm:text-sm pl-10 outline-none ring-0 bg-inherit dark:bg-gray-950 text-gray-800 dark:text-gray-200"
           />
         </div>
 
