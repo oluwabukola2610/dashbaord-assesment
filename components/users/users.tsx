@@ -28,7 +28,9 @@ const UsersPage = () => {
   );
   const [pageIndex, setPageIndex] = useState(0);
   const [globalFilter, setGlobalFilter] = useState<string>("");
-  const [sorting, setSorting] = useState<{ id: string; desc: boolean } | null>(null);
+  const [sorting, setSorting] = useState<{ id: string; desc: boolean } | null>(
+    null
+  );
   const pageSize = 5;
 
   const columns: ColumnDef<UserData>[] = useMemo(
@@ -51,7 +53,7 @@ const UsersPage = () => {
       {
         accessorKey: "company.name",
         header: "Company",
-       enableSorting: false,
+        enableSorting: false,
       },
     ],
     []
@@ -95,10 +97,9 @@ const UsersPage = () => {
         typeof updater === "function"
           ? updater(table.getState().pagination)
           : updater;
-    
+
       setPageIndex(newState.pageIndex);
     },
-    
   });
 
   const handleSort = (columnId: string) => {
@@ -114,86 +115,104 @@ const UsersPage = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="data-table p-4">
+    <div className=" p-4">
       <div className="mb-4">
         <input
           type="text"
           placeholder="Search by name..."
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
-          className="p-2 border border-gray-300 rounded dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none" 
+          className="p-2 border border-gray-300 rounded dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none"
         />
       </div>
-      <table className="w-full border-collapse bg-white dark:bg-gray-800 rounded-md">
-        <thead className="bg-gray-100 dark:bg-gray-700">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="border-b dark:border-gray-600">
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={`p-3 text-left text-gray-800 dark:text-gray-200 ${
-                    header.id === "name" ? "cursor-pointer" : ""
-                  }`}
-                  onClick={() => header.id === "name" && handleSort(header.id)}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                  {sorting?.id === header.id ? (sorting.desc ? ' 🔽' : ' 🔼') : header.id === "name" ? ' ⇅' : ''}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => (
+      <div className="overflow-x-auto w-full">
+        <table className="min-w-full border-collapse bg-white dark:bg-gray-800 rounded-md">
+          {" "}
+          <thead className="bg-gray-100 dark:bg-gray-700">
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr
-                key={row.id}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                key={headerGroup.id}
+                className="border-b dark:border-gray-600"
               >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="p-3 text-gray-700 dark:text-gray-300"
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={`p-3 text-left text-gray-800 dark:text-gray-200 ${
+                      header.id === "name" ? "cursor-pointer" : ""
+                    }`}
+                    onClick={() =>
+                      header.id === "name" && handleSort(header.id)
+                    }
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {sorting?.id === header.id
+                      ? sorting.desc
+                        ? " 🔽"
+                        : " 🔼"
+                      : header.id === "name"
+                      ? " ⇅"
+                      : ""}
+                  </th>
                 ))}
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                colSpan={columns.length}
-                className="h-24 text-center text-gray-700 dark:text-gray-300"
-              >
-                No results.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-      <div className="table-actions mt-6 flex justify-end items-center space-x-4 p-4">
-        <button
-          type="button"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-          className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
-        >
-          <BiArrowToLeft />
-        </button>
-        <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-          className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
-        >
-          <BiArrowToRight />
-        </button>
-      </div>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="p-3 text-gray-700 dark:text-gray-300"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="h-24 text-center text-gray-700 dark:text-gray-300"
+                >
+                  No results.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        </div>
+
+        <div className="table-actions mt-6 flex justify-end items-center space-x-4 p-4">
+          <button
+            type="button"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
+          >
+            <BiArrowToLeft />
+          </button>
+          <button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
+          >
+            <BiArrowToRight />
+          </button>
+        </div>
     </div>
   );
 };
