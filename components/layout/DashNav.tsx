@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes";
 import React from "react";
+import { BiCollapseHorizontal } from "react-icons/bi";
 import { BsMenuApp } from "react-icons/bs";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { CiSearch } from "react-icons/ci";
@@ -35,7 +36,7 @@ const DashNav: React.FC<{ toggle: () => void }> = ({ toggle }) => {
           className="hidden lg:flex items-center cursor-pointer"
           onClick={toggle}
         >
-          <BsMenuApp size="25" className="text-gray-700 dark:text-gray-300" />
+          <BiCollapseHorizontal size="25" className="text-gray-700 dark:text-gray-300" />
         </div>
 
         {/* Search Bar */}

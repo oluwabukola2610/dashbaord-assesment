@@ -1,7 +1,5 @@
-import Link from "next/link";
-
 import React from "react";
-import { FaUsers, FaNewspaper, FaTasks, FaImages, FaCog } from "react-icons/fa"; // Import icons
+import { FaUsers, FaNewspaper, FaTasks, FaImages, FaCog } from "react-icons/fa"; 
 
 export const sidebarData = [
   {

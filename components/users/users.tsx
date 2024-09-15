@@ -1,5 +1,4 @@
 "use client";
-
 import { useFetch } from "@/hook/useFetch";
 import {
   ColumnDef,
@@ -117,7 +116,7 @@ const UsersPage = () => {
           placeholder="Search by name..."
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
-          className="p-2 border border-gray-300 rounded dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+          className="p-2 border border-gray-300 rounded dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none" 
         />
       </div>
       <table className="w-full border-collapse bg-white dark:bg-gray-800 rounded-md">
