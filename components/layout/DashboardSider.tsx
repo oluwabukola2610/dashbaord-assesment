@@ -1,11 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useLayoutEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { sidebarData } from "./DashData";
 
 const DashboardSider: React.FC<{ collapse: boolean }> = ({ collapse }) => {
   const pathName = usePathname();
+  const [activePath, setActivePath] = useState<string>("");
+
+  useLayoutEffect(() => {
+    const activeKey =sidebarData.find((item) => item.key === pathName)?.key || "";
+    setActivePath(activeKey);
+  }, [pathName]);
 
   return (
     <div className="drawer-side z-10">
@@ -21,9 +28,9 @@ const DashboardSider: React.FC<{ collapse: boolean }> = ({ collapse }) => {
               href={item.key}
               key={item.key}
               className={`flex w-full p-3 items-center justify-center rounded-md ${
-                pathName === item.key
-                  ? "bg-gray-700 text-white" // Active path styles
-                  : "text-gray-800 dark:text-white" // Default styles
+                activePath === item.key
+                  ? "bg-gray-700 text-white"
+                  : "text-gray-800 dark:text-white"
               }`}
             >
               {item.icon}

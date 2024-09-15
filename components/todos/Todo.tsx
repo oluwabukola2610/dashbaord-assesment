@@ -68,9 +68,14 @@ const Todos = () => {
       },
     },
     onPaginationChange: (updater) => {
-      const newState = updater(table.getState().pagination);
+      const newState =
+        typeof updater === "function"
+          ? updater(table.getState().pagination)
+          : updater;
+    
       setPageIndex(newState.pageIndex);
     },
+    
   });
 
   if (loading) return <div>Loading...</div>;

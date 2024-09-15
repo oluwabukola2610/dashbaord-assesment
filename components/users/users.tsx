@@ -59,7 +59,7 @@ const UsersPage = () => {
 
   const sortedData = useMemo(() => {
     if (!data) return [];
-    let sorted = [...data];
+    const sorted = [...data];
     if (sorting?.id === "name") {
       sorted.sort((a, b) => {
         const aValue = a.name;
@@ -91,9 +91,14 @@ const UsersPage = () => {
       },
     },
     onPaginationChange: (updater) => {
-      const newState = updater(table.getState().pagination);
+      const newState =
+        typeof updater === "function"
+          ? updater(table.getState().pagination)
+          : updater;
+    
       setPageIndex(newState.pageIndex);
     },
+    
   });
 
   const handleSort = (columnId: string) => {

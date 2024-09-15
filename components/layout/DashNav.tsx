@@ -1,9 +1,7 @@
 "use client";
-
 import { useTheme } from "next-themes";
 import React from "react";
 import { BiCollapseHorizontal } from "react-icons/bi";
-import { BsMenuApp } from "react-icons/bs";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
