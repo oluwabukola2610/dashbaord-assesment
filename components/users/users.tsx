@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useFetch } from "@/hook/useFetch";
 import {
@@ -9,17 +10,9 @@ import {
 } from "@tanstack/react-table";
 import { useState, useMemo } from "react";
 import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
+import UserModal from "./UserModal";
 
-interface UserData {
-  name: string;
-  email: string;
-  address: {
-    city: string;
-  };
-  company: {
-    name: string;
-  };
-}
+export type UserData = Record<string, any>;
 
 const UsersPage = () => {
   const { data, loading, error } = useFetch<UserData[]>(
@@ -32,6 +25,8 @@ const UsersPage = () => {
     null
   );
   const pageSize = 5;
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns: ColumnDef<UserData>[] = useMemo(
     () => [
@@ -54,6 +49,22 @@ const UsersPage = () => {
         accessorKey: "company.name",
         header: "Company",
         enableSorting: false,
+      },
+      {
+        accessorKey: "id",
+        header: "Details",
+        enableSorting: false,
+        cell: ({ row }) => (
+          <button
+            onClick={() => {
+              setSelectedUser(row.original);
+              setIsModalOpen(true);
+            }}
+            className="btn"
+          >
+            View
+          </button>
+        ),
       },
     ],
     []
@@ -111,7 +122,6 @@ const UsersPage = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -127,7 +137,6 @@ const UsersPage = () => {
       </div>
       <div className="overflow-x-auto w-full">
         <table className="min-w-full border-collapse bg-white dark:bg-gray-800 rounded-md">
-          {" "}
           <thead className="bg-gray-100 dark:bg-gray-700">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
@@ -162,57 +171,82 @@ const UsersPage = () => {
               </tr>
             ))}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="p-3 text-gray-700 dark:text-gray-300"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
+          {loading ? (
+            <>
+              <span className="loading loading-dots loading-xs dark:text-white"></span>
+              <span className="loading loading-dots loading-sm dark:text-white"></span>
+              <span className="loading loading-dots loading-md dark:text-white"></span>
+              <span className="loading loading-dots loading-lg dark:text-white"></span>
+            </>
+          ) : (
+            <tbody>
+              {table.getRowModel().rows.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className="p-3 text-gray-700 dark:text-gray-300"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={columns.length}
+                    className="h-24 text-center text-gray-700 dark:text-gray-300"
+                  >
+                    No results.
+                  </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={columns.length}
-                  className="h-24 text-center text-gray-700 dark:text-gray-300"
-                >
-                  No results.
-                </td>
-              </tr>
-            )}
-          </tbody>
+              )}
+            </tbody>
+          )}
         </table>
-        </div>
+      </div>
 
-        <div className="table-actions mt-6 flex justify-end items-center space-x-4 p-4">
-          <button
-            type="button"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-            className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
-          >
-            <BiArrowToLeft />
-          </button>
-          <button
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-            className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
-          >
-            <BiArrowToRight />
-          </button>
+      <div className="table-actions mt-6 flex justify-end items-center space-x-4 p-4">
+        <button
+          type="button"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+          className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
+        >
+          <BiArrowToLeft />
+        </button>
+        <button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+          className="p-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded disabled:opacity-50"
+        >
+          <BiArrowToRight />
+        </button>
+      </div>
+      <dialog className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Hello!</h3>
+          <p className="py-4">
+            Press ESC key or click the button below to close
+          </p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
         </div>
+      </dialog>
+      {isModalOpen && (
+        <UserModal user={selectedUser} onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 };
